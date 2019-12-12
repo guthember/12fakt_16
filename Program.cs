@@ -9,6 +9,8 @@ namespace sms
 {
   class Program
   {
+    static List<String> kodok = new List<String>();
+    static List<int> egyformak = new List<int>();
     static String[] szavak = new String[600];
     static int darab;
 
@@ -98,6 +100,126 @@ namespace sms
       Console.WriteLine("{0} darab rövid szó van.",mennyi);
     }
 
+    static void Hatodik()
+    {
+      Console.WriteLine("\n6. feladat");
+      Console.WriteLine("\"kodok.txt\" fájl létrehozása");
+      StreamWriter ki = new StreamWriter("kodok.txt");
+
+      for (int i = 0; i < darab; i++)
+      {
+        String kod = SzobolSzamok(szavak[i]);
+        ki.WriteLine(kod);
+        kodok.Add(kod);
+      }
+
+      ki.Close();
+    }
+
+    static void Hetedik()
+    {
+      Console.WriteLine("\n7. feladat");
+      Console.Write("Kérek egy számsort: ");
+      String kodok = Console.ReadLine();
+      Console.WriteLine("Lehetséges szavak:");
+      bool van = false;
+      
+      for (int i = 0; i < darab; i++)
+      {
+        if (kodok.Length == szavak[i].Length && kodok == SzobolSzamok(szavak[i]))
+        {
+          Console.WriteLine(szavak[i]);
+          van = true;
+        }
+      }
+
+      if (!van)
+      {
+        Console.WriteLine("Nincs megfelelő szó");
+      }
+
+    }
+
+    static void Nyolcadik()
+    {
+      Console.WriteLine("\n8. feladat");
+      
+
+      for (int i = 0; i < darab - 1; i++)
+      {
+        if (!egyformak.Contains(i))
+        {
+          egyformak.Add(i);
+          bool tobb = false;
+          for (int j = i + 1; j < darab; j++)
+          {
+            if (kodok[i] == kodok[j])
+            {
+              tobb = true;
+              egyformak.Add(j);
+            }
+          }
+
+          if (!tobb)
+          {
+            egyformak.RemoveAt(egyformak.Count - 1);
+          }
+        }
+      }
+
+      for (int i = 0; i < egyformak.Count; i++)
+      {
+        if (i != 0 & i % 5 == 0)
+        {
+          Console.WriteLine();
+        }
+        Console.Write("{0} : {1}; ",szavak[egyformak[i]], kodok[egyformak[i]]);
+      }
+    }
+
+    static void Kilencedik()
+    {
+      Console.WriteLine("\n\n9. feladat");
+      List<string> egyfKodok = new List<string>();
+
+      for (int i = 0; i < egyformak.Count; i++)
+      {
+        egyfKodok.Add(kodok[egyformak[i]]);
+      }
+
+      int max = 0;
+      String melyik = "";
+      int j = 0;
+      while (j < egyfKodok.Count)
+      {
+        String mit = egyfKodok[j];
+        int db = 0;
+
+        while (j < egyfKodok.Count && egyfKodok[j] == mit)
+        {
+          j++;
+          db++;
+        }
+
+        if (max < db)
+        {
+          max = db;
+          melyik = mit;
+        }
+
+      }
+
+      Console.WriteLine(melyik);
+      for (int i = 0; i < egyformak.Count; i++)
+      {
+        if (kodok[egyformak[i]] == melyik)
+        {
+          Console.WriteLine(szavak[egyformak[i]]);
+        }
+      }
+
+    }
+
     static void Main(string[] args)
     {
       Elso();
@@ -105,6 +227,10 @@ namespace sms
       Harmadik();
       Negyedik();
       Otodik();
+      Hatodik();
+      Hetedik();
+      Nyolcadik();
+      Kilencedik();
 
       Console.ReadLine();
     }
